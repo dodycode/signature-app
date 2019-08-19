@@ -7,6 +7,7 @@
         <VueSignaturePad
           height="300px"
           ref="signaturePad"
+          saveType="image/jpeg"
           v-bind:customStyle="{
             border: '#696969 1px solid',
             marginBottom: '10px',
