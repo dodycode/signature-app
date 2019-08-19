@@ -1,7 +1,7 @@
 # signature-app
 Canvas based signature web application. Made for practice purposes.
 
-![demo](https://res.cloudinary.com/kirzsite/image/upload/v1566207474/personalpage/signature.png)
+![demo](https://res.cloudinary.com/kirzsite/image/upload/v1566232082/personalpage/Screenshot_2019-03-21_13-32-19.png)
 
 ### Materials
 * [Vue JS](https://vuejs.org/)
