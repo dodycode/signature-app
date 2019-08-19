@@ -1,58 +1,189 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener">eslint</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
+  <div class="container">
+    <div class="card">
+      <h1 class="lead">My Signature</h1>
+      <div class="content">
+        <span class="desc">Write down your Signature below!</span>
+        <VueSignaturePad
+          height="300px"
+          ref="signaturePad"
+          v-bind:customStyle="{
+            border: '#696969 1px solid',
+            marginBottom: '10px',
+            borderRadius: '.25rem',
+            minHeight: '300px'
+          }"
+        />
+      </div>
+      <div class="actions">
+        <div class="left-actions">
+          <button @click="clearSignature" class="btn btn-red" style="margin-right: 5px;">Clear</button>
+          <button @click="undoSignature" class="btn">Undo</button>
+        </div>
+        <div class="right-actions">
+          <button @click="saveSignature" class="btn btn-green">Save</button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
   name: 'HelloWorld',
-  props: {
-    msg: String
+
+  methods: {
+    clearSignature() {
+      this.$refs.signaturePad.clearSignature();
+    },
+    undoSignature() {
+      this.$refs.signaturePad.undoSignature();
+    },
+    saveSignature() {
+      const { isEmpty, data } = this.$refs.signaturePad.saveSignature();  
+      if (!isEmpty) {
+        // console.log(data);
+        this.downloadSignature(data, 'signature.png');
+      }else{
+        alert("Please provide a signature first.");
+      }
+    },
+    downloadSignature(dataURL, filename){
+      var blob = this.dataURLToBlob(dataURL);
+      var url = window.URL.createObjectURL(blob);
+
+      var a = document.createElement("a");
+      a.style = "display: none";
+      a.href = url;
+      a.download = filename;
+
+      document.body.appendChild(a);
+      a.click();
+
+      window.URL.revokeObjectURL(url);
+    },
+    dataURLToBlob(dataURL){
+      // Code taken from https://github.com/ebidel/filer.js
+      var parts = dataURL.split(';base64,');
+      var contentType = parts[0].split(":")[1];
+      var raw = window.atob(parts[1]);
+      var rawLength = raw.length;
+      var uInt8Array = new Uint8Array(rawLength);
+
+      for (var i = 0; i < rawLength; ++i) {
+        uInt8Array[i] = raw.charCodeAt(i);
+      }
+
+      return new Blob([uInt8Array], { type: contentType });
+    }
+  },
+
+  mounted: function() {
+    this.$nextTick(function () {
+      this.$refs.signaturePad.resizeCanvas();
+    })
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h3 {
-  margin: 40px 0 0;
+.container{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
-ul {
-  list-style-type: none;
-  padding: 0;
+
+.card{
+  background-color: #fff;
+  padding: 40px;
+  box-shadow: 0 1px 3px 0 rgba(0,0,0,.1), 0 1px 2px 0 rgba(0,0,0,.06);
+  width: 50%;
+  border-radius: .25rem;
 }
-li {
-  display: inline-block;
-  margin: 0 10px;
+
+.lead{
+  text-align: center;
+  font-weight: 400;
+  letter-spacing: 3px;
+  margin-bottom: 34px;
 }
-a {
-  color: #42b983;
+
+.desc{
+  margin-bottom: 10px;
+  display: block;
+  font-size: 14px;
+}
+
+.actions{
+  display: flex;
+  justify-content: space-between;
+}
+
+.btn{
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  border: 0;
+  background-color: #4299e1;
+  color: #fff;
+  border-radius: .25rem;
+  font-size: 18px;
+  padding: 8px 25px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.btn:hover,
+.btn:focus{
+  background-color: #2b6cb0;
+}
+
+.btn-green{
+  background-color: #48bb78;
+}
+
+.btn-green:hover,
+.btn-green:focus{
+  background-color: #2f855a;
+}
+
+.btn-red{
+  background-color: #f56565;
+}
+
+.btn-red:hover,
+.btn-red:focus{
+  background-color: #c53030;
+}
+
+@media screen and (max-width: 768px){
+  .container{
+    height: 100%;
+    padding: 0 16px;
+  }
+
+  .card{
+    width: 100%;
+    margin-top: 40px;
+  }
+}
+
+@media screen and (max-width: 640px){
+  .card{
+    padding: 20px;
+  }
+
+  .actions{
+    flex-direction: column;
+  }
+
+  .btn{
+    width: 100%;
+    margin: 5px 0;
+    padding: 14px 0;
+  }
 }
 </style>
