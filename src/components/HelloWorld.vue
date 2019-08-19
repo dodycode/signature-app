@@ -43,7 +43,7 @@ export default {
       const { isEmpty, data } = this.$refs.signaturePad.saveSignature();  
       if (!isEmpty) {
         // console.log(data);
-        this.downloadSignature(data, 'signature.png');
+        this.downloadSignature(data, 'signature.jpg');
       }else{
         alert("Please provide a signature first.");
       }
