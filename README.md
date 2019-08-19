@@ -1,4 +1,9 @@
 # signature-app
+Canvas based signature web application. Made for practice purposes.
+
+### Materials
+* [Vue JS](https://vuejs.org/)
+* [Vue Signature Pad](https://github.com/neighborhood999/vue-signature-pad)
 
 ## Project setup
 ```
