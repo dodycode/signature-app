@@ -1,4 +1,4 @@
-# frontend-vue-blog
+# signature-app
 
 ## Project setup
 ```
