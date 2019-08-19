@@ -1,6 +1,8 @@
 # signature-app
 Canvas based signature web application. Made for practice purposes.
 
+![demo](https://res.cloudinary.com/kirzsite/image/upload/v1566207474/personalpage/signature.png)
+
 ### Materials
 * [Vue JS](https://vuejs.org/)
 * [Vue Signature Pad](https://github.com/neighborhood999/vue-signature-pad)
